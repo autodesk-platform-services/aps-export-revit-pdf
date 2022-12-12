@@ -1,27 +1,28 @@
 {
-    "name": "forge-revit2pdf",
+    "name": "aps-export-revit-pdf",
     "description": "A sample showing how to export views|sheets to pdf",
-    "repository": "https://github.com/Autodesk-Forge/forge-revit2pdf",
-    "logo": "https://avatars0.githubusercontent.com/u/8017462?v=3&s=200",
+    "repository": "https://github.com/Autodesk-Platform-Services/aps-export-revit-pdf",
+    "logo": "https://cdn.autodesk.io/favicon.ico",
     "keywords": [
         "autodesk",
-        "forge",
+        "aps",
+        "revit",
         "design automation"        
     ],
     "env": {
-        "FORGE_CLIENT_ID": {
-            "description": "Forge Client ID"
+        "APS_CLIENT_ID": {
+            "description": "APS Client ID"
         },
-        "FORGE_CLIENT_SECRET": {
-            "description": "Forge Client Secret"
+        "APS_CLIENT_SECRET": {
+            "description": "APS Client Secret"
         },
-        "FORGE_CALLBACK_URL": {
-            "description": "Callback URL of your Forge app, required for 3-legged OAuth",
-            "value": "https://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/forge/callback/oauth"
+        "APS_CALLBACK_URL": {
+            "description": "Callback URL of your APS app, required for 3-legged OAuth",
+            "value": "https://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/aps/callback/oauth"
         },
-        "FORGE_WEBHOOK_URL": {
+        "APS_WEBHOOK_URL": {
             "description": "Callback URL of your webhook",
-            "value": "http://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/forge/callback/designautomation"
+            "value": "http://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/aps/callback/designautomation"
         }
     },
     "website": "https://developer.autodesk.com/",

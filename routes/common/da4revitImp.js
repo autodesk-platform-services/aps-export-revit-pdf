@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Autodesk Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -134,7 +134,7 @@ function cancelWorkitem(workItemId, access_token) {
 }
 
 
-function exportPdfs(inputRvtUrl, inputJson, outputExlUrl, access_token_3Legged, access_token_2Legged) {
+function exportPdfs(inputRvtUrl, inputJson, outputExlUrl, objectInfo, access_token_3Legged, access_token_2Legged) {
 
     return new Promise(function (resolve, reject) {
 
@@ -155,7 +155,11 @@ function exportPdfs(inputRvtUrl, inputJson, outputExlUrl, access_token_3Legged, 
                      outputPdf: {
                         verb: 'put',
                         url: outputExlUrl,
-                        optional: true
+                        optional: true,
+                        headers:{
+                            Authorization: 'Bearer ' + access_token_2Legged.access_token,
+                        },
+
                     },
                     onComplete: {
                         verb: "post",
@@ -187,10 +191,8 @@ function exportPdfs(inputRvtUrl, inputJson, outputExlUrl, access_token_3Legged, 
                 }
                 workitemList.push({
                     workitemId: resp.id,
-                    projectId: null,
-                    createVersionData: null,
-                    access_token_3Legged: null,
-                    outputUrl: outputExlUrl
+                    access_token_2Legged: access_token_2Legged,
+                    objectInfo: objectInfo,
                 })
 
                 if (response.statusCode >= 400) {
@@ -209,7 +211,6 @@ function exportPdfs(inputRvtUrl, inputJson, outputExlUrl, access_token_3Legged, 
             }
         });
     })
-
 }
 
 ///////////////////////////////////////////////////////////////////////

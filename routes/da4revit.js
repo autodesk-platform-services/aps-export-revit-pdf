@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Autodesk Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -48,9 +48,11 @@ router.use(async (req, res, next) => {
     let credentials = await oauth.getInternalToken();
     let oauth_client = oauth.getClient();
 
-    req.oauth_client = oauth_client;
-    req.oauth_token = credentials;
-    next();
+    if(credentials ){
+        req.oauth_client = oauth_client;
+        req.oauth_token = credentials;
+        next();
+    }
 });
 
 
@@ -86,10 +88,19 @@ router.get('/da4revit/v1/revit/:version_storage/pdfs', async (req, res, next) =>
 
     try {
         const objectApi = new ObjectsApi();
-        const object = await objectApi.uploadObject(bucketKey, Temp_Output_File_Name, 0, '', {}, oauth_client, oauth_token);
-        const signedObj = await objectApi.createSignedResource(bucketKey, object.body.objectKey, new PostBucketsSigned(minutesExpiration = 50), {access:'readwrite'}, oauth_client, oauth_token)
+        let objects = [];
+        objects.push({ objectKey: Temp_Output_File_Name, data: ' '})
+        // Create a storage and get the objectId, or you can create the objectId directly by the format "urn:adsk.objects:os.object:<BucketKey>/<ObjectKey>"
+        const resources = await objectApi.uploadResources( bucketKey, objects, {}, oauth_client, oauth_token )
+        const objectId = resources[0].completed.objectId;
+        const objectKey = resources[0].completed.objectKey;
+        const objectInfo = {
+            BucketKey: bucketKey,
+            ObjectKey: objectKey
+        };
 
-        let result = await exportPdfs(inputRvtUrl, inputJson, signedObj.body.signedUrl, req.oauth_token, oauth_token);
+
+        let result = await exportPdfs(inputRvtUrl, inputJson, objectId, objectInfo, req.oauth_token, oauth_token);
         if (result === null || result.statusCode !== 200) {
             console.log('failed to export the pdf files');
             res.status(500).end('failed to export the pdf files');
@@ -192,15 +203,19 @@ router.post('/callback/designautomation', async (req, res, next) => {
             return;
         }
         let index = workitemList.indexOf(workitem);
-        workitemStatus.Status = 'Completed';
-        workitemStatus.ExtraInfo = workitem.outputUrl;
-        console.log('Export pdf successfully');
+
+        try{
+            const objectApi = new ObjectsApi();
+            const downloadInfo = await objectApi.getS3DownloadURL( workitem.objectInfo.BucketKey, workitem.objectInfo.ObjectKey, null, req.oauth_client, workitem.access_token_2Legged );
+            workitemStatus.Status = 'Completed';
+            workitemStatus.ExtraInfo = downloadInfo.body.url;
+            console.log('Export pdf successfully');
+        }catch(err){
+            console.log("Failed to get the pdf files due to "+ err);
+            workitemStatus.Status = 'Failed';
+        }
         global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        // Remove the workitem after it's done
         workitemList.splice(index, 1);
-
-
-
     }else{
         // Report if not successful.
         workitemStatus.Status = 'Failed';

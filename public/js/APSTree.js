@@ -1,6 +1,6 @@
 ﻿/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by Autodesk Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -19,7 +19,7 @@
 $(document).ready(function () {
   // first, check if current visitor is signed in
   jQuery.ajax({
-    url: '/api/forge/oauth/v1/token',
+    url: '/api/aps/oauth/v1/token',
     success: function (res) {
       // yes, it is signed in...
       $('#autodeskSignOutButton').show();
@@ -32,11 +32,9 @@ $(document).ready(function () {
       // prepare sign out
       $('#autodeskSignOutButton').click(function () {
         $('#hiddenFrame').on('load', function (event) {
-          location.href = '/api/forge/oauth/v1/signout';
+          location.href = '/api/aps/oauth/v1/signout';
         });
         $('#hiddenFrame').attr('src', 'https://accounts.autodesk.com/Authentication/LogOut');
-        // learn more about this signout iframe at
-        // https://forge.autodesk.com/blog/log-out-forge
       })
 
       // and refresh button
@@ -55,7 +53,7 @@ $(document).ready(function () {
 
   $('#autodeskSigninButton').click(function () {
     jQuery.ajax({
-      url: '/api/forge/oauth/v1/url',
+      url: '/api/aps/oauth/v1/url',
       success: function (url) {
         location.href = url;
       }
@@ -63,7 +61,7 @@ $(document).ready(function () {
   })
 
 
-  $.getJSON("/api/forge/oauth/v1/clientid", function (res) {
+  $.getJSON("/api/aps/oauth/v1/clientid", function (res) {
     $("#ClientID").val(res.id);
     $("#provisionAccountSave").click(function () {
       $('#provisionAccountModal').modal('toggle');
@@ -82,7 +80,7 @@ function prepareUserHubsTree() {
           'themes': { "icons": true },
           'multiple': false,
           'data': {
-              "url": '/api/forge/datamanagement/v1',
+              "url": '/api/aps/datamanagement/v1',
               "dataType": "json",
               'cache': false,
               'data': function (node) {
@@ -94,11 +92,11 @@ function prepareUserHubsTree() {
       'types': {
           'default': { 'icon': 'glyphicon glyphicon-question-sign' },
           '#': { 'icon': 'glyphicon glyphicon-user' },
-          'hubs': { 'icon': 'https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/a360hub.png' },
-          'personalHub': { 'icon': 'https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/a360hub.png' },
-          'bim360Hubs': { 'icon': 'https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/bim360hub.png' },
-          'bim360projects': { 'icon': 'https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/bim360project.png' },
-          'a360projects': { 'icon': 'https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/a360project.png' },
+          'hubs': { 'icon': 'https://cdn.autodesk.io/dm/xs/a360hub.png' },
+          'personalHub': { 'icon': 'https://cdn.autodesk.io/dm/xs/a360hub.png' },
+          'bim360Hubs': { 'icon': 'https://cdn.autodesk.io/dm/xs/bim360hub.png' },
+          'bim360projects': { 'icon': 'https://cdn.autodesk.io/dm/xs/bim360project.png' },
+          'a360projects': { 'icon': 'https://cdn.autodesk.io/dm/xs/a360project.png' },
           'folders': { 'icon': 'glyphicon glyphicon-folder-open' },
           'items': { 'icon': 'glyphicon glyphicon-file' },
           'bim360documents': { 'icon': 'glyphicon glyphicon-file' },
@@ -138,7 +136,7 @@ function prepareUserHubsTree() {
 
 function showUser() {
   jQuery.ajax({
-    url: '/api/forge/user/v1/profile',
+    url: '/api/aps/user/v1/profile',
     success: function (profile) {
       var img = '<img src="' + profile.picture + '" height="20px">';
       $('#userInfo').html(img + profile.name);
