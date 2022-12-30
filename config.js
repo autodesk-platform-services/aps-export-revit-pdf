@@ -38,7 +38,7 @@ module.exports = {
         endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
         nickname:     process.env.DESIGN_AUTOMATION_NICKNAME?process.env.DESIGN_AUTOMATION_NICKNAME:process.env.APS_CLIENT_ID,
         activity_name: process.env.DESIGN_AUTOMATION_ACTIVITY_NAME?process.env.DESIGN_AUTOMATION_ACTIVITY_NAME:"ExportToPdfsAppActivity",
-        appbundle_activity_alias: 'dev',
+        appbundle_activity_alias: process.env.DESIGN_AUTOMATION_ACTIVITY_ALIAS?process.env.DESIGN_AUTOMATION_ACTIVITY_ALIAS:'dev',
 
         URL:{
             GET_ENGINES_URL:    "https://developer.api.autodesk.com/da/us-east/v3/engines",

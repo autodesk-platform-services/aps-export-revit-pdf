@@ -23,7 +23,19 @@
         "APS_WEBHOOK_URL": {
             "description": "Callback URL of your webhook",
             "value": "http://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/aps/callback/designautomation"
-        }
+        },
+        "DESIGN_AUTOMATION_NICKNAME": {
+            "description": "Revit Design Automation NickName, APS_CLIENT_ID by default",
+            "value": "<<YOUR APS_CLIENT_ID HERE>>"
+        },
+        "DESIGN_AUTOMATION_ACTIVITY_NAME": {
+            "description": "Revit Design Automation Activity Name",
+            "value": "ExportToPdfsAppActivity"
+        },
+        "DESIGN_AUTOMATION_ACTIVITY_ALIAS": {
+            "description": "Revit Design Automation Activity Alias",
+            "value": "dev"
+        }        
     },
     "website": "https://developer.autodesk.com/",
     "success_url": "/"
